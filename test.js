@@ -8,6 +8,3 @@ console.log("calling addon");
 addon.start();
 console.log("called addon");
 
-// setTimeout(function() {
-//     console.log("done in js");
-// }, 1000);
