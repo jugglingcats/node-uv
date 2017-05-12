@@ -1,0 +1,12 @@
+{
+      "name": "node-uv",
+      "version": "0.0.0",
+      "description": "My reusable C++ addon",
+      "gypfile": true,
+      "main": "./build/Release/node-uv",
+      "license": "MIT",
+      "dependencies": {
+            "nan": "^2.3.3",
+            "segfault-handler": "^1.0.0"
+      }
+}
