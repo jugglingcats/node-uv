@@ -18,12 +18,23 @@ int n = 1;
 
 static void Runner2(uv_async_t* handle) {
 	printf("Got async send! %d\n", n++);
+	
+	v8::Isolate *isolate = Isolate::GetCurrent();
+	HandleScope scope(isolate);
+
+	v8::Persistent<v8::Function> *func = (v8::Persistent<v8::Function> *) handle->data;
+	func->Get(isolate)->Call(isolate->GetCurrentContext()->Global(), 0, NULL);
+
+	delete func;
 	uv_close((uv_handle_t *)handle, NULL);
 }
 
 void Start(const FunctionCallbackInfo<Value>& args)
 {
 	printf("In run async\n");
+
+	printf("Size of uv_async_t: %zd\n", sizeof(uv_async_t));
+	printf("Size of void *: %zd\n", sizeof(void *));
 
 	Isolate* isolate = Isolate::GetCurrent();
 	HandleScope scope(isolate);
@@ -36,6 +47,11 @@ void Start(const FunctionCallbackInfo<Value>& args)
 
 	uv_async_t *handle = (uv_async_t*)malloc(sizeof(uv_async_t));
 	uv_async_init(uv_default_loop(), handle, &Runner2);
+
+	v8::Local<v8::Function> func = v8::Local<v8::Function>::Cast(args[0]);
+	auto savedFunc = new v8::Persistent<v8::Function>();
+	savedFunc->Reset(isolate, func);
+	handle->data = savedFunc;
 
 	/// Example using uv_async_send (node does not terminate)
 	//printf("Async send\n");

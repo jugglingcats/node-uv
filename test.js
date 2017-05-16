@@ -4,7 +4,10 @@ var SegfaultHandler = require('segfault-handler');
 
 SegfaultHandler.registerHandler("crash.log");
 
-console.log("calling addon");
-addon.start();
-console.log("called addon");
+addon.start(function() {
+	console.log("In Javascript callback");
+});
 
+setTimeout(function() {
+	console.log("Called in setTimeout");
+}, 5);
