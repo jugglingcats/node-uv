@@ -53,7 +53,6 @@ void Start(const FunctionCallbackInfo<Value>& args)
 	savedFunc->Reset(isolate, func);
 	handle->data = savedFunc;
 
-	/// Example using uv_async_send (node does not terminate)
 	//printf("Async send\n");
 	uv_async_send(handle);
 }
